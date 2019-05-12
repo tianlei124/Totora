@@ -1,11 +1,11 @@
 #include <QApplication>
 
-#include "searchbox.hpp"
+#include "searchwindow.h"
 
 int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
-    SearchBox *searchEdit = new SearchBox;
+    searchWindow *searchEdit = new searchWindow;
     searchEdit->show();
     return app.exec();
 }

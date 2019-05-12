@@ -1,0 +1,12 @@
+# Ignore auto config file
+Totora.pro.user
+
+# Ignore vscode settings.
+.vscode/
+
+# Ignore dependancy by qpm
+qpm.json
+vendor/
+
+# MAC files
+*.DS_Store

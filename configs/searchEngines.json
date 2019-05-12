@@ -1,0 +1,72 @@
+{
+    "searchEngines": [
+        {
+            "title": "bing",
+            "url": "https://www.bing.com/search?q=@totora",
+            "hotKey": ["B"],
+            "isEnable": true
+        },
+        {
+            "title": "baidu",
+            "url": "https://www.baidu.com/s?wd=@totora",
+            "hotKey": ["B", "D"],
+            "isEnable": true
+
+        },
+        {
+            "title": "sogou",
+            "url": "https://www.sogou.com/web?query=@totora",
+            "hotKey": ["S"],
+            "isEnable": true
+
+        },
+        {
+            "title": "Google Search",
+            "url": "https://www.google.com/search?q=@totora",
+            "hotKey": ["G"],
+            "isEnable": false
+        },
+        {
+            "title": "DuckDuckGo",
+            "url": "https://duckduckgo.com/?q=@totora",
+            "hotKey": ["D", "D", "G"],
+            "isEnable": false
+        },
+        {
+            "title": "WolframAlpha",
+            "url": "http://www.wolframalpha.com/input/?i=@totora",
+            "hotKey": ["W", "A"],
+            "isEnable": false
+        },
+        {
+            "title": "Google Images",
+            "url": "https://www.google.com/search?q=@totora&tbs=imgo:1,&tbm=isch",
+            "hotKey": ["G", "I"],
+            "isEnable": false
+        },
+        {
+            "title": "Unsplash",
+            "url": "https://unsplash.com/search/photos/@totora",
+            "hotKey": ["U", "S"],
+            "isEnable": true
+        },
+        {
+            "title": "GitHub",
+            "url": "https://github.com/search?&q=@totora",
+            "hotKey": ["G", "H"],
+            "isEnable": true
+        },
+        {
+            "title": "Stack Overflow",
+            "url": "https://stackoverflow.com/search?q=@totora",
+            "hotKey": ["S", "O"],
+            "isEnable": true
+        },
+        {
+            "title": "Wikipedia (en)",
+            "url": "https://en.wikipedia.org/w/index.php?search=@haste",
+            "hotKey": ["W"],
+            "isEnable": false
+        }
+    ]
+}

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/totoro.png</file>
+        <file>configs/searchEngines.json</file>
     </qresource>
 </RCC>
