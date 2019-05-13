@@ -11,7 +11,7 @@
 #include <QDebug>
 
 searchWindow::searchWindow(QWidget *parent) :
-    QMainWindow(parent),
+    QMainWindow(parent, Qt::Dialog),
     ui(new Ui::searchWindow)
 {
     ui->setupUi(this);
@@ -67,7 +67,7 @@ searchWindow::searchWindow(QWidget *parent) :
     createTrayIcon();
     trayIcon->show();
 
-    showSearchWindow = new QHotkey(QKeySequence("ctrl+alt+T"), true);
+    showSearchWindow = new QHotkey(QKeySequence("ctrl+alt+Q"), true);
     qDebug() << "Is Registered: " << showSearchWindow->isRegistered();
     connect(showSearchWindow, &QHotkey::activated, this, &QWidget::show);
 

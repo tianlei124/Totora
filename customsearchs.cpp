@@ -19,10 +19,9 @@ CustomSearchs::CustomSearchs(QWidget *parent) :
 
     QDir runtimeDir(QCoreApplication::applicationDirPath());
     QString configJsonPath(runtimeDir.absoluteFilePath("searchEngines.json"));
-
     QJsonDocument jsonDoc{};
     QFileInfo fileInfo(configJsonPath);
-    if (fileInfo.isFile() && !loadJsonFile(configJsonPath, jsonDoc))
+    if ((fileInfo.isFile() && !loadJsonFile(configJsonPath, jsonDoc)) || !fileInfo.isFile())
     {
         bool ret = loadJsonFile(":/configs/searchEngines.json", jsonDoc);
         qDebug() << "try :/configs/searchEngines.json, result " << ret;
