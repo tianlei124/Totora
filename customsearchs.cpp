@@ -16,7 +16,7 @@ CustomSearchs::CustomSearchs(QWidget *parent) :
     searchEngines(), isNeedStore(false)
 {
     ui->setupUi(this);
-
+    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
     QDir runtimeDir(QCoreApplication::applicationDirPath());
     QString configJsonPath(runtimeDir.absoluteFilePath("searchEngines.json"));
     QJsonDocument jsonDoc{};
@@ -65,6 +65,9 @@ CustomSearchs::CustomSearchs(QWidget *parent) :
         }
     }
 
+    searchEngine localSearch{"Local Search", "", {'L', 'C'}};
+    searchEngines.push_back(std::make_pair(localSearch, true));
+
     for (size_t i = 0;i < searchEngines.size();++i)
     {
         QString title = searchEngines[i].first.title;
@@ -99,6 +102,10 @@ CustomSearchs::~CustomSearchs()
 
 QString CustomSearchs::getSearchEngineURL(const QString& title)
 {
+    if (title == "Local Search")
+    {
+        return QString("");
+    }
     QString URL = "https://www.bing.com/search?q=@totora";
     for (const std::pair<searchEngine, bool>& engine : searchEngines)
     {
@@ -129,6 +136,12 @@ void CustomSearchs::on_searchEngineItems_clicked(const QModelIndex &index)
     }
 }
 
+void CustomSearchs::closeEvent(QCloseEvent *event)
+{
+    event->ignore();
+    reject();
+}
+
 bool CustomSearchs::rewriteSearchEngineConfig()
 {
     if (isNeedStore && !ui->searchEngineItems->isVisible())
@@ -142,6 +155,9 @@ bool CustomSearchs::rewriteSearchEngineConfig()
         QJsonArray jsonArray;
         for (const std::pair<searchEngine, bool>& engine : searchEngines)
         {
+            if (engine.first.title == "Local Search")
+                continue;
+
             QJsonObject subObject;
             subObject.insert("title", engine.first.title);
             subObject.insert("url", engine.first.url);
@@ -177,7 +193,7 @@ void CustomSearchs::on_deleteItemButton_clicked()
 {
     if (static_cast<size_t>(ui->searchEngineItems->count()) != searchEngines.size() ||
             static_cast<size_t>(ui->searchEngineItems->currentRow()) > searchEngines.size() ||
-            ui->searchEngineItems->currentRow() < 0)
+            ui->searchEngineItems->currentRow() < 0 || searchEngines[ui->searchEngineItems->currentRow()].first.title == "Local Search")
         return ;
 
     qDebug() << "detete title " << searchEngines[ui->searchEngineItems->currentRow()].first.title << ", url"
@@ -266,7 +282,7 @@ void CustomSearchs::on_turnDownButton_clicked()
 
 void CustomSearchs::on_titleLineEdit_editingFinished()
 {
-    if (ui->titleLineEdit->hasFocus())
+    if (ui->titleLineEdit->hasFocus() || searchEngines[ui->searchEngineItems->currentRow()].first.title == "Local Search")
     {
         return ;
     }
@@ -285,7 +301,7 @@ void CustomSearchs::on_titleLineEdit_editingFinished()
 
 void CustomSearchs::on_urlLineEdit_editingFinished()
 {
-    if (ui->urlLineEdit->hasFocus())
+    if (ui->urlLineEdit->hasFocus() || searchEngines[ui->searchEngineItems->currentRow()].first.title == "Local Search")
     {
         return ;
     }

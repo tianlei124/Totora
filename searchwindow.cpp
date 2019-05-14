@@ -25,6 +25,9 @@ searchWindow::searchWindow(QWidget *parent) :
 
     connect(this->ui->searchBox, SIGNAL(returnPressed()), this, SLOT(selectSearchEngine()));
 
+    localSearchWindow = new LocalSearchWindow(this);
+    connect(this, SIGNAL(triggerLocalSearch(const QString&)), localSearchWindow, SLOT(getContent(const QString&)));
+
     customSearchs = new CustomSearchs(parent);
     const std::vector<std::pair<searchEngine, bool> >& searchEngineItems = customSearchs->getSearchEngineItems();
     for (size_t i = 0;i < searchEngineItems.size();++i)
@@ -69,7 +72,10 @@ searchWindow::searchWindow(QWidget *parent) :
 
     showSearchWindow = new QHotkey(QKeySequence("ctrl+alt+Q"), true);
     qDebug() << "Is Registered: " << showSearchWindow->isRegistered();
-    connect(showSearchWindow, &QHotkey::activated, this, &QWidget::show);
+    connect(showSearchWindow, &QHotkey::activated, this, [this](){
+        this->show();
+        ui->searchBox->setFocus();
+    });
 
     ui->searchBox->setFocus();
 }
@@ -257,7 +263,10 @@ void searchWindow::createActions()
     showPreferenceAction = new QAction(QString("Show Preference"), this);
     // connect(showPreferenceAction, &QAction::triggered, this, )
     showSearchBoxAction = new QAction(QString("Show Search Window"), this);
-    connect(showSearchBoxAction, &QAction::triggered, this, &QWidget::showNormal);
+    connect(showSearchBoxAction, &QAction::triggered, this, [this](){
+        this->show();
+        ui->searchBox->setFocus();
+    });
     showCustomSearchEnginesAction = new QAction(QString("Show Custom Search Eigines"), this);
     connect(showCustomSearchEnginesAction, &QAction::triggered, customSearchs, &CustomSearchs::show);
     quitAction = new QAction(QString("Quit"), this);
@@ -280,10 +289,16 @@ void searchWindow::createTrayIcon()
 
 void searchWindow::doSearch(int id)
 {
+    QString keyWord = ui->searchBox->text();
     QString URL = "https://www.baidu.com/s?wd=@totora";
     if (selectedEngines.empty())
     {
         const std::vector<std::pair<searchEngine, bool> >& searchEngineItems = customSearchs->getSearchEngineItems();
+        if (searchEngineItems[id].first.title == "Local Search")
+        {
+            emit triggerLocalSearch(keyWord);
+            return ;
+        }
         URL = searchEngineItems[id].first.url;
     }
     else
@@ -293,13 +308,18 @@ void searchWindow::doSearch(int id)
         {
             if (title.contains(it->first))
             {
+                if (it->first == "Local Search")
+                {
+                    emit triggerLocalSearch(keyWord);
+                    return ;
+                }
                 URL = customSearchs->getSearchEngineURL(it->first);
                 break;
             }
         }
     }
 
-    QUrl url = URL.replace("@totora", ui->searchBox->text());
+    QUrl url = URL.replace("@totora", keyWord);
     qDebug() << "selected engies " << url;
 
     QDesktopServices::openUrl(QUrl(url));
@@ -308,7 +328,6 @@ void searchWindow::doSearch(int id)
 void searchWindow::resetSearchStatus()
 {
     ui->searchBox->setText("");
-    ui->searchBox->setFocus();
     ui->searchEngineList->clear();
     const std::vector<std::pair<searchEngine, bool> >& searchEngineItems = customSearchs->getSearchEngineItems();
     for (size_t i = 0;i < searchEngineItems.size();++i)
@@ -339,7 +358,9 @@ void searchWindow::resetSearchStatus()
 
         ui->searchEngineList->addItem(pItem);
     }
+
     ui->searchEngineList->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    this->hide();
     selectedEngines.clear();
 }
 

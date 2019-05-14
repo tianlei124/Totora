@@ -1,10 +1,12 @@
 QT      +=  network widgets
 SOURCES =   main.cpp \
     customsearchs.cpp \
+    localsearchwindow.cpp \
     searchwindow.cpp
 HEADERS  = \
     customsearchs.h \
-    searchwindow.h
+    searchwindow.h \
+    localsearchwindow.h
 
 RESOURCES += \
     resources.qrc

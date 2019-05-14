@@ -8,6 +8,7 @@
 #include <map>
 
 #include "customsearchs.h"
+#include "localsearchwindow.h"
 
 namespace Ui {
 class searchWindow;
@@ -25,6 +26,9 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *k) override;
+
+signals:
+    void triggerLocalSearch(const QString&);
 
 protected slots:
     void selectSearchEngine();
@@ -44,6 +48,7 @@ private:
     void createTrayIcon();
 
     CustomSearchs *customSearchs;
+    LocalSearchWindow *localSearchWindow;
 
     QAction *showPreferenceAction;
     QAction *showSearchBoxAction;

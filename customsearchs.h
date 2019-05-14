@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <vector>
 #include <array>
-
+#include <QCloseEvent>
 #include <QTimer>
 
 namespace Ui {
@@ -31,6 +31,9 @@ public:
 
 signals:
     void updateSearchEngines();
+
+protected:
+    void closeEvent(QCloseEvent *event);
 
 protected slots:
     bool rewriteSearchEngineConfig();
